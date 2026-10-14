@@ -1,0 +1,455 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<meta name="description" content="Research and a two-week pilot proposal for how the Turing LinkedIn account should handle comments.">
+<title>Turing Brand Replies</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Source+Serif+4:opsz,wght@8..60,500;8..60,600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f6f5f1; --card:#ffffff; --ink:#15171b; --muted:#5d636d; --line:#e2e0d8;
+  --accent:#2b55e6; --accent-soft:#e8edfd;
+  --go:#1d7f55; --go-soft:#e3f3ea;
+  --route:#a8650a; --route-soft:#fbf0de;
+  --stop:#b8402c; --stop-soft:#f9e6e2;
+  --bar-bg:#ecebe5;
+  --shadow:0 1px 2px rgba(20,20,30,.05),0 6px 24px rgba(20,20,30,.05);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#111317; --card:#1a1d23; --ink:#eceef2; --muted:#a2a8b3; --line:#2b2f37;
+    --accent:#7f9bff; --accent-soft:#1f2740;
+    --go:#5cc896; --go-soft:#16302a;
+    --route:#e7a94a; --route-soft:#33280f;
+    --stop:#f08a76; --stop-soft:#3a1d18;
+    --bar-bg:#262a31;
+    --shadow:none; color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#111317; --card:#1a1d23; --ink:#eceef2; --muted:#a2a8b3; --line:#2b2f37;
+  --accent:#7f9bff; --accent-soft:#1f2740;
+  --go:#5cc896; --go-soft:#16302a;
+  --route:#e7a94a; --route-soft:#33280f;
+  --stop:#f08a76; --stop-soft:#3a1d18;
+  --bar-bg:#262a31;
+  --shadow:none; color-scheme:dark;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.6 Inter,system-ui,-apple-system,sans-serif;-webkit-font-smoothing:antialiased}
+.wrap{max-width:980px;margin:0 auto;padding:0 16px}
+h1,h2,h3{font-family:"Source Serif 4",Georgia,serif;font-weight:600;line-height:1.2;margin:0;text-wrap:balance}
+h2{font-size:clamp(26px,4vw,34px);margin-bottom:10px}
+h3{font-size:20px}
+p{margin:0 0 12px}
+a{color:var(--accent)}
+.eyebrow{font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);font-weight:600;margin-bottom:10px}
+.lede{color:var(--muted);font-size:18px;max-width:680px}
+section{padding:56px 0;border-top:1px solid var(--line)}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:22px;box-shadow:var(--shadow)}
+
+/* nav */
+nav.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+nav.top .wrap{display:flex;gap:18px;align-items:center;height:52px;overflow-x:auto;scrollbar-width:none}
+nav.top a{color:var(--muted);text-decoration:none;font-size:14px;font-weight:500;white-space:nowrap}
+nav.top a:hover{color:var(--ink)}
+nav.top .brand{color:var(--ink);font-weight:700;margin-right:auto;white-space:nowrap}
+
+/* hero */
+.hero{padding:64px 0 48px}
+.hero h1{font-size:clamp(34px,6vw,56px);max-width:820px;margin-bottom:18px}
+.verdict{display:flex;gap:16px;align-items:flex-start;margin-top:28px;padding:20px 22px;border-radius:14px;background:var(--accent-soft);border:1px solid color-mix(in srgb,var(--accent) 25%,transparent)}
+.verdict .tag{flex:none;background:var(--accent);color:#fff;font-weight:700;font-size:13px;padding:5px 10px;border-radius:999px;letter-spacing:.04em}
+.verdict p{margin:0;font-size:17px}
+.meta{margin-top:18px;color:var(--muted);font-size:14px}
+
+/* agree */
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.agree li{margin-bottom:8px}
+.agree ul{padding-left:18px;margin:8px 0 0}
+
+/* stats */
+.stats{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;margin-top:24px}
+.stat .num{font-family:"Source Serif 4",Georgia,serif;font-size:48px;font-weight:600;color:var(--accent);line-height:1}
+.stat .what{font-weight:600;margin:10px 0 6px}
+.stat .src{font-size:13px;color:var(--muted)}
+.stat .src a{color:var(--muted)}
+.caveat{display:inline-block;font-size:12px;font-weight:600;color:var(--route);background:var(--route-soft);padding:2px 8px;border-radius:6px;margin-top:8px}
+
+/* bar chart */
+.chart{margin-top:24px}
+.chart h3{margin-bottom:4px}
+.chart .sub{color:var(--muted);font-size:14px;margin-bottom:18px}
+.bar-row{display:grid;grid-template-columns:90px 1fr 52px;gap:12px;align-items:center;margin-bottom:12px}
+.bar-row .lbl{font-size:14px;font-weight:500}
+.bar-track{height:26px;background:var(--bar-bg);border-radius:6px;overflow:hidden}
+.bar-fill{height:100%;background:color-mix(in srgb,var(--accent) 45%,var(--bar-bg));border-radius:6px;transform-origin:left;animation:grow 1.1s cubic-bezier(.2,.8,.2,1) both}
+@keyframes grow{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+.bar-row.hl .bar-fill{background:var(--accent)}
+.bar-row .val{font-weight:700;font-variant-numeric:tabular-nums;text-align:right}
+.bar-row.hl .lbl,.bar-row.hl .val{color:var(--accent)}
+
+/* risk compare */
+.risk h3{margin-bottom:10px}
+.risk ul{padding-left:18px;margin:0}
+.risk li{margin-bottom:8px}
+.risk.reply{border-top:4px solid var(--route)}
+.risk.silent{border-top:4px solid var(--stop)}
+.callout{margin-top:16px;padding:16px 18px;border-left:4px solid var(--accent);background:var(--card);border-radius:0 10px 10px 0}
+
+/* triage */
+.triage{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.15fr);gap:16px;margin-top:24px}
+.comments{display:flex;flex-direction:column;gap:10px}
+.cmt{all:unset;cursor:pointer;display:block;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px 16px;transition:border-color .15s,transform .15s}
+.cmt:hover{border-color:var(--muted)}
+.cmt:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.cmt[aria-pressed="true"]{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft)}
+.cmt .who{font-size:12px;color:var(--muted);font-weight:600;margin-bottom:4px}
+.cmt .txt{font-size:15px}
+.answer{position:sticky;top:68px;align-self:start}
+.answer .pill{display:inline-block;font-weight:700;font-size:13px;padding:5px 12px;border-radius:999px;margin-bottom:12px}
+.pill.go{background:var(--go-soft);color:var(--go)}
+.pill.route{background:var(--route-soft);color:var(--route)}
+.pill.stop{background:var(--stop-soft);color:var(--stop)}
+.answer h3{margin-bottom:8px}
+.answer .reply{margin-top:12px;padding:12px 14px;border-radius:10px;background:var(--bg);border:1px dashed var(--line);font-size:15px}
+.answer .reply b{display:block;font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:4px}
+.answer .who-acts{font-size:14px;color:var(--muted);margin-top:12px}
+
+/* layers */
+.layer .n{font-family:"Source Serif 4",Georgia,serif;font-size:14px;color:var(--accent);font-weight:600;margin-bottom:6px}
+.layer h3{margin-bottom:8px}
+.layer ul{padding-left:18px;margin:8px 0 0}
+.layer li{margin-bottom:6px}
+
+/* guardrails */
+.rules{counter-reset:r;display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-top:20px}
+.rule{counter-increment:r;display:flex;gap:14px;align-items:flex-start}
+.rule::before{content:counter(r);flex:none;width:28px;height:28px;border-radius:50%;background:var(--accent-soft);color:var(--accent);font-weight:700;font-size:14px;display:grid;place-items:center}
+.rule b{display:block}
+.rule span{color:var(--muted);font-size:15px}
+
+/* pilot */
+.timeline{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:20px}
+.timeline .card{position:relative}
+.timeline .when{font-size:13px;font-weight:700;color:var(--accent);margin-bottom:6px}
+table{width:100%;border-collapse:collapse;margin-top:16px;font-size:15px}
+th,td{text-align:left;padding:10px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-size:12px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);font-weight:600}
+td:last-child{font-variant-numeric:tabular-nums}
+
+/* decisions */
+.decide{display:flex;flex-direction:column;gap:12px;margin-top:20px}
+.decide label{display:flex;gap:14px;align-items:flex-start;cursor:pointer}
+.decide input{margin-top:5px;width:18px;height:18px;accent-color:var(--accent);flex:none}
+.decide b{display:block}
+.decide span{color:var(--muted);font-size:15px}
+
+/* sources */
+.sources ol{padding-left:20px;margin:12px 0 0;font-size:14px;color:var(--muted)}
+.sources li{margin-bottom:8px}
+footer{padding:32px 0 56px;color:var(--muted);font-size:13px;border-top:1px solid var(--line)}
+
+@media (max-width:760px){
+  .grid2,.grid3,.stats,.triage,.rules,.timeline{grid-template-columns:1fr}
+  .answer{position:static}
+  .hero{padding:40px 0 32px}
+  section{padding:40px 0}
+  .bar-row{grid-template-columns:72px 1fr 44px}
+  .verdict{flex-direction:column;gap:10px}
+  table{font-size:14px}
+  th,td{padding:8px 6px}
+}
+@media (prefers-reduced-motion:reduce){.bar-fill{animation:none}html{scroll-behavior:auto}}
+</style>
+</head>
+<body>
+
+<nav class="top"><div class="wrap">
+  <span class="brand">Brand Replies</span>
+  <a href="#agree">Common ground</a>
+  <a href="#evidence">Evidence</a>
+  <a href="#risk">Risk</a>
+  <a href="#triage">Triage</a>
+  <a href="#model">Model</a>
+  <a href="#pilot">Pilot</a>
+  <a href="#decide">Decisions</a>
+</div></nav>
+
+<header class="hero"><div class="wrap">
+  <div class="eyebrow">For Kimberly · Discussion on 15 Oct 2026</div>
+  <h1>Should the Turing account reply to comments?</h1>
+  <p class="lede">A short read on what the evidence says, where the real risk sits, and a way to engage that keeps the brand account safe.</p>
+  <div class="verdict">
+    <span class="tag">PROPOSAL</span>
+    <p><b>Yes, but narrowly.</b> The brand account replies only from a pre-approved bank and never debates. People, not the logo, carry the real conversations. We try it for two weeks with clear stop rules, then decide.</p>
+  </div>
+  <p class="meta">Prepared by Ritwik Chakradhar · 14 Oct 2026 · 5 minute read</p>
+</div></header>
+
+<section id="agree"><div class="wrap">
+  <div class="eyebrow">01 · Common ground</div>
+  <h2>Your concern is right. It just has a narrower fix than silence.</h2>
+  <p class="lede">The brand account speaks for the whole company. A bad reply there costs more than a bad reply from a person. This proposal is built around that.</p>
+  <div class="grid2" style="margin-top:24px">
+    <div class="card agree">
+      <h3>What we agree on</h3>
+      <ul>
+        <li>We do not trust every commenter. Some will bait.</li>
+        <li>The brand account never argues, speculates, or improvises.</li>
+        <li>Replying to customer service issues is a sound default. That was the Weights &amp; Biases rule.</li>
+        <li>A second set of eyes is worth having before anything non-routine goes out.</li>
+      </ul>
+    </div>
+    <div class="card agree">
+      <h3>What this adds</h3>
+      <ul>
+        <li>Short, safe replies to <b>good-faith questions</b> and <b>thoughtful comments</b>. Nothing else.</li>
+        <li>Anything heated goes to a named person, a DM, or nowhere.</li>
+        <li>Our own people engage from personal accounts, where the reach is larger and the risk is theirs to manage.</li>
+      </ul>
+    </div>
+  </div>
+</div></section>
+
+<section id="evidence"><div class="wrap">
+  <div class="eyebrow">02 · Evidence</div>
+  <h2>What the data says</h2>
+  <p class="lede">Five numbers that matter for a B2B audience on LinkedIn. Each one is marked with its limits.</p>
+
+  <div class="card chart">
+    <h3>Engagement lift when the author replies to comments</h3>
+    <div class="sub">Buffer, more than 2 million posts, published Nov 2025. LinkedIn shows the largest lift of the four platforms with a number.</div>
+    <div id="bars">
+      <div class="bar-row hl"><div class="lbl">LinkedIn</div><div class="bar-track"><div class="bar-fill" style="width:100.0%"></div></div><div class="val">+30%</div></div>
+      <div class="bar-row"><div class="lbl">Instagram</div><div class="bar-track"><div class="bar-fill" style="width:70.0%"></div></div><div class="val">+21%</div></div>
+      <div class="bar-row"><div class="lbl">Facebook</div><div class="bar-track"><div class="bar-fill" style="width:30.0%"></div></div><div class="val">+9%</div></div>
+      <div class="bar-row"><div class="lbl">X</div><div class="bar-track"><div class="bar-fill" style="width:26.7%"></div></div><div class="val">+8%</div></div>
+    </div>
+    <span class="caveat">Correlation, not proof. Popular posts attract more replies.</span>
+  </div>
+
+  <div class="stats">
+    <div class="card stat">
+      <div class="num">73%</div>
+      <div class="what">of social users say they will buy from a competitor if a brand does not respond to them.</div>
+      <div class="src">Sprout Social Index 2025. About three quarters also expect a reply within 24 hours.</div>
+      <span class="caveat">Consumer survey, not B2B buyers</span>
+    </div>
+    <div class="card stat">
+      <div class="num">10x</div>
+      <div class="what">A company's employees have, on average, 10 times as many connections as the company has followers.</div>
+      <div class="src">LinkedIn Elevate. Employees also see 2x the click-through rate on the same content.</div>
+      <span class="caveat">LinkedIn sales material for its own product</span>
+    </div>
+    <div class="card stat">
+      <div class="num">3% → 30%</div>
+      <div class="what">Only 3% of employees share company content, yet those shares drive a 30% increase in total engagement.</div>
+      <div class="src">LinkedIn Elevate. Every 2 employee shares bring 1 Company Page view.</div>
+      <span class="caveat">Same LinkedIn source</span>
+    </div>
+    <div class="card stat">
+      <div class="num">86%</div>
+      <div class="what">of B2B decision-makers are more likely to invite a strong thought leadership producer into an RFP.</div>
+      <div class="src">Edelman and LinkedIn B2B Thought Leadership Impact Report 2024, about 3,500 business leaders, 7 markets.</div>
+      <span class="caveat">About content quality, not replies</span>
+    </div>
+  </div>
+
+  <div class="callout">
+    <b>What this means:</b> no study proves that brand replies on LinkedIn win B2B deals. The evidence is directional. Replies lift engagement, silence reads as indifference, and people reach far more buyers than pages do. That is why the proposal below is a small, measured test and not a policy change.
+  </div>
+</div></section>
+
+<section id="risk"><div class="wrap">
+  <div class="eyebrow">03 · Risk</div>
+  <h2>Both choices carry risk. Only one of them is controllable.</h2>
+  <div class="grid2" style="margin-top:24px">
+    <div class="card risk reply">
+      <h3>Risk of replying</h3>
+      <ul>
+        <li>A reply gets screenshotted or taken out of context.</li>
+        <li>A commenter baits the brand into a debate on AI and jobs.</li>
+        <li>A reply makes a small complaint more visible. In a published ASOS case, 1 of 108 replies to the brand's apology went viral and carried the story further.</li>
+      </ul>
+      <p style="margin-top:12px"><b>Control:</b> approved reply bank, no debates, second-eyes rule, clear escalation.</p>
+    </div>
+    <div class="card risk silent">
+      <h3>Risk of staying silent</h3>
+      <ul>
+        <li>Good-faith questions sit unanswered under our own post.</li>
+        <li>The algorithm reads a quiet thread as a dead post, so fewer buyers see it.</li>
+        <li>Competitors who reply look more present and more human.</li>
+        <li>A real complaint left alone tends to grow.</li>
+      </ul>
+      <p style="margin-top:12px"><b>Control:</b> very little. Silence cannot be tuned.</p>
+    </div>
+  </div>
+</div></section>
+
+<section id="triage"><div class="wrap">
+  <div class="eyebrow">04 · Try it</div>
+  <h2>Comment triage: what would we actually do?</h2>
+  <p class="lede">Click a typical comment. Each one shows the action, who acts, and the exact kind of reply. Most comments never need the brand to say anything new.</p>
+  <div class="triage">
+    <div class="comments" id="comments"></div>
+    <div class="card answer" id="answer" aria-live="polite"></div>
+  </div>
+</div></section>
+
+<section id="model"><div class="wrap">
+  <div class="eyebrow">05 · Operating model</div>
+  <h2>Two layers: the brand stays safe, people do the talking</h2>
+  <div class="grid2" style="margin-top:24px">
+    <div class="card layer">
+      <div class="n">Layer 1 · Turing brand account</div>
+      <h3>Acknowledge and point</h3>
+      <p>Low-risk, scripted, fast.</p>
+      <ul>
+        <li>Thank thoughtful comments in one line.</li>
+        <li>Answer factual questions only from approved facts and public links.</li>
+        <li>Move any service issue to DM with one standard line.</li>
+        <li>Never debate, never discuss clients, pricing, legal, or roadmap.</li>
+      </ul>
+    </div>
+    <div class="card layer">
+      <div class="n">Layer 2 · Named people</div>
+      <h3>Converse and build relationships</h3>
+      <p>Where the 10x reach and the trust live.</p>
+      <ul>
+        <li>Joseph replies as the post author and adds the link in the first comment.</li>
+        <li>Ritwik and others engage from personal accounts and DM relevant B2B specialists to join the thread.</li>
+        <li>Kimberly asks her network to get behind the post.</li>
+        <li>Personal views stay personal. No speaking for Turing on contested topics.</li>
+      </ul>
+    </div>
+  </div>
+
+  <h3 style="margin-top:40px">Guardrails</h3>
+  <div class="rules">
+    <div class="rule"><div><b>Reply bank first</b><span>10 to 15 pre-approved lines. Anything outside the bank needs a second set of eyes.</span></div></div>
+    <div class="rule"><div><b>One owner, one approver</b><span>One person replies. Kimberly, or her delegate, approves anything new.</span></div></div>
+    <div class="rule"><div><b>No debate from the brand</b><span>Disagreement is fine to leave. The brand never argues a point.</span></div></div>
+    <div class="rule"><div><b>Move service issues off the feed</b><span>One line, then DM or the support channel. No details in public.</span></div></div>
+    <div class="rule"><div><b>Hide only for policy</b><span>Spam, abuse, or personal data. Never hide criticism for being critical.</span></div></div>
+    <div class="rule"><div><b>Escalate early</b><span>If a thread passes 3 hostile replies or press shows up, stop and loop in comms.</span></div></div>
+  </div>
+</div></section>
+
+<section id="pilot"><div class="wrap">
+  <div class="eyebrow">06 · Pilot</div>
+  <h2>A two-week test with a clear stop rule</h2>
+  <p class="lede">Small enough to be safe. Long enough to see a signal.</p>
+  <div class="timeline">
+    <div class="card"><div class="when">Days 1 to 2</div><h3>Set up</h3><p>Write the reply bank together. Agree owner, approver, and escalation contacts.</p></div>
+    <div class="card"><div class="when">Days 3 to 12</div><h3>Run</h3><p>Apply the triage rules on every Turing post. Log every reply and every skip in one sheet.</p></div>
+    <div class="card"><div class="when">Day 14</div><h3>Decide</h3><p>Review the numbers together. Keep, adjust, or return to service-only replies.</p></div>
+  </div>
+  <div class="card" style="margin-top:16px;overflow-x:auto">
+    <h3>What we measure</h3>
+    <table>
+      <thead><tr><th>Metric</th><th>Why it matters</th><th>Target</th></tr></thead>
+      <tbody>
+        <tr><td>Good-faith questions answered</td><td>Nobody left hanging under our own post</td><td>100%, within 24 h</td></tr>
+        <tr><td>Comments per post</td><td>Conversation, the signal LinkedIn rewards</td><td>Up vs last 4 posts</td></tr>
+        <tr><td>Impressions per post</td><td>Reach to buyers</td><td>Up vs last 4 posts</td></tr>
+        <tr><td>Page followers gained</td><td>Durable audience</td><td>Up vs prior 2 weeks</td></tr>
+        <tr><td>Replies needing correction or deletion</td><td>The risk Kimberly flagged</td><td>0. Any 1 triggers a review</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div></section>
+
+<section id="decide"><div class="wrap">
+  <div class="eyebrow">07 · For tomorrow</div>
+  <h2>Three decisions for our meeting</h2>
+  <p class="lede">Tick as we go. Nothing here is posted or changed until we agree.</p>
+  <div class="card decide">
+    <label><input type="checkbox"><div><b>Run the two-week pilot?</b><span>Brand replies limited to the reply bank, people carry the conversation.</span></div></label>
+    <label><input type="checkbox"><div><b>Who owns replies, who approves?</b><span>Proposal: Ritwik drafts and replies, Kimberly approves anything outside the bank.</span></div></label>
+    <label><input type="checkbox"><div><b>Which topics are off-limits for the brand?</b><span>Starting list: clients, pricing, legal, roadmap, AI and jobs debates, politics.</span></div></label>
+  </div>
+</div></section>
+
+<section class="sources" id="sources"><div class="wrap">
+  <div class="eyebrow">Sources and limits</div>
+  <h2 style="font-size:24px">Where the numbers come from</h2>
+  <ol>
+    <li>Buffer reply analysis of 2M+ posts, via <a href="https://www.socialmediatoday.com/news/report-looks-at-post-replies-and-how-they-impact-engagement-rates/805370/">Social Media Today, 12 Nov 2025</a>. Correlational.</li>
+    <li><a href="https://sproutsocial.com/insights/social-media-customer-service-statistics/">Sprout Social, citing the 2025 Sprout Social Index</a>. 73% buy from a competitor if unanswered; about three quarters expect a reply within 24 h. Consumer sample.</li>
+    <li><a href="https://business.linkedin.com/content/dam/me/business/en-us/elevate/Resources/pdf/elevate-infographic.pdf">LinkedIn Elevate infographic</a>. 10x connections, 2x CTR, 3% of employees drive 30% more engagement. Read from the PDF directly. Promotional source.</li>
+    <li><a href="https://www.edelman.com/expertise/business-marketing/2024-b2b-thought-leadership-report">Edelman and LinkedIn 2024 B2B Thought Leadership Impact Report</a>. 86% RFP figure taken from a published summary; the original PDF blocked automated access.</li>
+    <li>ASOS crisis-reply case: <a href="https://www.inderscience.com/offers.php?id=144749">"Creating a crisis: an examination of a modern crisis on Twitter," Inderscience</a>. Single case study.</li>
+  </ol>
+  <p style="margin-top:16px;color:var(--muted);font-size:14px">Not found: any controlled study linking brand-account replies on LinkedIn to B2B pipeline. Popular claims such as "replying in the first hour adds 35% reach" had no traceable source and are left out.</p>
+</div></section>
+
+<footer><div class="wrap">Internal discussion draft · Not for external distribution · v1, 14 Oct 2026</div></footer>
+
+<script>
+const COMMENTS = [
+  {who:"VP Data, enterprise SaaS", txt:"Great framing. How does Turing actually measure model quality once it is in production?",
+   act:"go", label:"Reply from brand", title:"Good-faith question. Answer it.",
+   why:"This is the comment we want more of. Leaving it unanswered under our own post looks like nobody is home.",
+   reply:"Thanks for the question. We wrote about how we approach this here: [link to public article]. Joseph can share more in the thread.",
+   whoActs:"Brand account, from the reply bank. Joseph may add depth from his own profile."},
+  {who:"B2B marketing consultant", txt:"This is spot on. Sharing with my team.",
+   act:"go", label:"Like, short thanks", title:"Positive comment. Acknowledge in one line.",
+   why:"A like plus a one-line thanks keeps the thread warm and costs nothing.",
+   reply:"Thank you, glad it was useful.",
+   whoActs:"Brand account. No approval needed, it is in the bank."},
+  {who:"Software engineer", txt:"AI companies like this are the reason people are losing jobs. Shameful.",
+   act:"stop", label:"Do not reply", title:"Contested topic. The brand stays out.",
+   why:"Any brand reply here becomes a debate, and a debate is what gets screenshotted. Criticism alone is not a reason to hide the comment.",
+   reply:"No reply from the brand. Leave the comment visible.",
+   whoActs:"Nobody, by default. If a named person wants to engage, they speak for themselves from a personal account."},
+  {who:"Freelance developer", txt:"I completed a project two months ago and still have not been paid. Can someone help?",
+   act:"route", label:"Route to DM", title:"Service issue. One line, then off the feed.",
+   why:"This is the case the brand already handles. Acknowledge publicly so others see we care, then resolve privately. No details in public.",
+   reply:"Sorry to hear this. We have sent you a DM so the right team can look into it.",
+   whoActs:"Brand account posts the line. Support or the owning team picks up the DM the same day."},
+  {who:"Account with no photo", txt:"DM me for 10x more followers on LinkedIn!!!",
+   act:"stop", label:"Hide or report", title:"Spam. Remove under policy.",
+   why:"Spam is the one case where hiding is correct. It clutters the thread for real buyers.",
+   reply:"No reply. Hide or report as spam.",
+   whoActs:"Brand account admin."},
+  {who:"Journalist, tech publication", txt:"Interesting. Is Turing working with any of the big labs on this?",
+   act:"route", label:"Route to comms", title:"Press or client question. Do not answer in public.",
+   why:"Anything touching clients or partnerships goes through comms. A public guess is the riskiest reply we could make.",
+   reply:"Thanks for reaching out. Our team will follow up with you directly.",
+   whoActs:"Brand account posts the holding line only after Kimberly or comms approves. Comms takes over."},
+  {who:"Job seeker", txt:"Is Turing hiring for roles like this? Would love to apply.",
+   act:"go", label:"Reply with link", title:"Simple request. Point to the right page.",
+   why:"Easy goodwill. A careers link answers it fully.",
+   reply:"Thanks for your interest. Open roles are listed here: [careers link].",
+   whoActs:"Brand account, from the reply bank."}
+];
+const PILL = {go:"go", route:"route", stop:"stop"};
+const list = document.getElementById("comments"), ans = document.getElementById("answer");
+function esc(s){return s.replace(/[&<>]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;"}[c]))}
+function show(i){
+  const c = COMMENTS[i];
+  [...list.children].forEach((b,j)=>b.setAttribute("aria-pressed", j===i));
+  ans.innerHTML = `<span class="pill ${PILL[c.act]}">${esc(c.label)}</span>
+    <h3>${esc(c.title)}</h3><p>${esc(c.why)}</p>
+    <div class="reply"><b>Reply</b>${esc(c.reply)}</div>
+    <div class="who-acts"><b>Who acts:</b> ${esc(c.whoActs)}</div>`;
+}
+COMMENTS.forEach((c,i)=>{
+  const b = document.createElement("button");
+  b.className = "cmt"; b.type = "button";
+  b.innerHTML = `<div class="who">${esc(c.who)}</div><div class="txt">${esc(c.txt)}</div>`;
+  b.onclick = ()=>show(i);
+  list.appendChild(b);
+});
+show(0);
+
+</script>
+
+</body>
+</html>
